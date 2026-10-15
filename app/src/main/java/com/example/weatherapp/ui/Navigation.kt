@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,8 +48,7 @@ fun Navigation() {
                     icon = {
                         Icon(
                             imageVector = Icons.Default.Today,
-                            contentDescription = "Today's Weather",
-
+                            contentDescription = "Calender day logo", // alt
                         )
                     },
                     label = { Text("Today") },
@@ -63,7 +63,17 @@ fun Navigation() {
                             restoreState = true
                         }
 
-                    }
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurface,
+
+                        indicatorColor = MaterialTheme.colorScheme.primary
+
+                    )
                 )
 
                 // ----- Forecast.kt -----
@@ -71,7 +81,7 @@ fun Navigation() {
                     icon = {
                         Icon(
                             imageVector = Icons.Default.DateRange,
-                            contentDescription = "Weekly Forecast"
+                            contentDescription = "Calender week logo", // alt
                         )
                     },
                     label = { Text("Forecast") },
@@ -86,7 +96,17 @@ fun Navigation() {
                             restoreState = true
                         }
 
-                    }
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurface,
+
+                        indicatorColor = MaterialTheme.colorScheme.primary
+
+                    )
                 )
 
 
