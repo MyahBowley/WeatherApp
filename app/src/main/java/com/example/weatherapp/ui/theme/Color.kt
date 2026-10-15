@@ -13,7 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 val DarkBlue = Color(0xFF17203F)    // FF = 100% Opacity
 val MedBlue = Color(0xFF423A8E)
 val MedPurple = Color(0xFF7A52AB)
-val DarkPurple = Color(0xFF9B3AAD)
+val DarkPurple = Color(0xFF923FA9)
 
 val BabyBlue = Color(0xFF8363D5)    // Additional
 val Lavender = Color(0xFFA481DD)    // Additional

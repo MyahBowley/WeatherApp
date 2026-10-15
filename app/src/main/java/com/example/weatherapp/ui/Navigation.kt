@@ -38,7 +38,7 @@ fun Navigation() {
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                containerColor = MaterialTheme.colorScheme.primary,
                 windowInsets = NavigationBarDefaults.windowInsets
             )
             {
@@ -47,7 +47,8 @@ fun Navigation() {
                     icon = {
                         Icon(
                             imageVector = Icons.Default.Today,
-                            contentDescription = "Today's Weather"
+                            contentDescription = "Today's Weather",
+
                         )
                     },
                     label = { Text("Today") },

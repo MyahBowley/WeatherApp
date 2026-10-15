@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.material3)
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
