@@ -1,11 +1,15 @@
 package com.example.weatherapp.ui
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Today
+import androidx.compose.material.icons.filled.ViewDay
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +27,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.weatherapp.ui.screens.AppSettings
@@ -36,24 +43,30 @@ import com.example.weatherapp.ui.screens.WeatherToday
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+
+
     var selectedIndex by remember {mutableIntStateOf(0)} // default set to 0 (This changes based on what the user is selecting
+
 
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = MaterialTheme.colorScheme.primary,
-                windowInsets = NavigationBarDefaults.windowInsets
+                containerColor = Color.Transparent,
+                modifier = Modifier.height(95.dp),
+                windowInsets = WindowInsets(0, 20, 0, 140),
+
             )
             {
                 // ----- WeatherToday.kt -----
                 NavigationBarItem(
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.Today,
+                            imageVector = Icons.Default.ViewDay,
                             contentDescription = "Calender day logo", // alt
+                            modifier = Modifier.size(35.dp)
                         )
                     },
-                    label = { Text("Today") },
+//                    label = { Text("Today") },
                     selected = selectedIndex == 0,
                     onClick = {
                         selectedIndex = 0
@@ -84,9 +97,10 @@ fun Navigation() {
                         Icon(
                             imageVector = Icons.Default.DateRange,
                             contentDescription = "Calender week logo", // alt
+                            modifier = Modifier.size(35.dp)
                         )
                     },
-                    label = { Text("Forecast") },
+//                    label = { Text("Forecast") },
                     selected = selectedIndex == 1,
                     onClick = {
                         selectedIndex = 1
@@ -118,9 +132,10 @@ fun Navigation() {
                         Icon(
                             imageVector = Icons.Default.Settings,
                             contentDescription = "Gear logo", // alt
+                            modifier = Modifier.size(35.dp)
                         )
                     },
-                    label = { Text("Settings") },
+//                    label = { Text("Settings") },
                     selected = selectedIndex == 2,
                     onClick = {
                         selectedIndex = 2
@@ -152,7 +167,8 @@ fun Navigation() {
         NavHost(
             navController = navController,
             startDestination = "WeatherToday",
-            modifier = Modifier.padding(innerPadding)
+//            modifier = Modifier.padding(innerPadding)
+
         ) {
             composable(route = "WeatherToday") {
                 WeatherToday()

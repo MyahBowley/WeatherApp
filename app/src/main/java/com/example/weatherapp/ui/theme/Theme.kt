@@ -3,6 +3,7 @@ package com.example.weatherapp.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -12,15 +13,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-
 private val DarkColorScheme = darkColorScheme(
-    primary = DarkPurple,
+    primary = MedPurple,
     secondary = PurpleGrey80,
     tertiary = Pink80,
+
+//    background = Color(0xFFFFFBFE),
+//    surface = Color(0xFFFFFBFE),
+
+    onPrimary = Color.White,    // "on" is designated for text or icons
+    onSecondary = Color.White,
+    onTertiary = Color.White,
+    onBackground = Color(0xFF1C1B1F),
+    onSurface = Color.White,
+
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = DarkPurple,
+    primary = MedPurple,
     secondary = PurpleGrey40,
     tertiary = Pink40,
     background = Color(0xFFFFFBFE),
@@ -31,6 +41,7 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = Color.White,
     onBackground = Color(0xFF1C1B1F),
     onSurface = unSelected,
+
 
 )
 
