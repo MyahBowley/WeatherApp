@@ -52,6 +52,7 @@ fun Navigation() {
         bottomBar = {
             NavigationBar(
                 containerColor = Color.Transparent,
+//                containerColor = Color(0xFF7A52AB),
                 modifier = Modifier.height(95.dp),
                 windowInsets = WindowInsets(0, 20, 0, 140),
 

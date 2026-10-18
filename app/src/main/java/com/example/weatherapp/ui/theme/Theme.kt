@@ -24,7 +24,7 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.White,    // "on" is designated for text or icons
     onSecondary = Color.White,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
+    onBackground = Color.White,
     onSurface = Color.White,
 
 )
@@ -48,7 +48,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun WeatherAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
