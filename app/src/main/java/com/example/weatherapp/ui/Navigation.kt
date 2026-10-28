@@ -168,7 +168,7 @@ fun Navigation() {
         NavHost(
             navController = navController,
             startDestination = "WeatherToday",
-//            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding)
 
         ) {
             composable(route = "WeatherToday") {
