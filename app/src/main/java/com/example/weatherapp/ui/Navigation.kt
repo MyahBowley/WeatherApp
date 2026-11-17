@@ -1,5 +1,8 @@
 package com.example.weatherapp.ui
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +23,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -30,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.weatherapp.MainViewModel
 import com.example.weatherapp.ui.screens.AppSettings
 
 // Screens
@@ -42,10 +48,32 @@ import com.example.weatherapp.ui.screens.WeatherToday
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation() {
+
+    val mainViewModel: MainViewModel = viewModel()
     val navController = rememberNavController()
 
 
     var selectedIndex by remember {mutableIntStateOf(0)} // default set to 0 (This changes based on what the user is selecting
+
+    // Begin: Ask permission to get device location.
+    // Note: If permission is previously granted, the dialog won't appear and refreshLocation() will get called.
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { results ->
+        if (results.values.any { it }) {
+            mainViewModel.refreshLocation() // call a function to get the current location for device
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        launcher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
+    }
+    // End: Ask permission to get device location.
 
 
     Scaffold(
@@ -172,7 +200,7 @@ fun Navigation() {
 
         ) {
             composable(route = "WeatherToday") {
-                WeatherToday()
+                WeatherToday(mainViewModel)
             }
             composable(route = "Forecast") {
                 Forecast()

@@ -44,29 +44,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.weatherapp.MainViewModel
 import com.example.weatherapp.ui.theme.MedPurple
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 
 // This will store today's current weather
 
 @Composable
-fun WeatherToday() {
+fun WeatherToday(viewModel: MainViewModel) {
+
+    val weather = viewModel.weather
+
     // GRADIENT FOR BACKGROUND
     val gradientColors = listOf(
         Color(0xFF17203F),
         Color(0xFF423A8E),
         Color(0xFF7A52AB),
         Color(0xFF933EA6)
-//        Color(0xFF192240),
-//        Color(0xFF2B2E62),
-//        Color(0xFF3A377D),
-//        Color(0xFF493C93),
-//        Color(0xFF573F9F),
-//        Color(0xFF6946AA),
-//        Color(0xFF714FAA),
-//        Color(0xFF7F51AA),
-//        Color(0xFF824DA9),
-//        Color(0xFF953AA7),
     )
 
     val boxGradient = listOf(
@@ -74,11 +69,6 @@ fun WeatherToday() {
         Color(0xFF493292),
         Color(0xFF6E419F),
         Color(0xFF9A38AA),
-
-//        Color(0xFF9A38AA),
-//        Color(0xFF6E419F),
-//        Color(0xFF493292),
-//        Color(0xFF3D2C8D),
     )
     // BACKGROUND OF SCREEN
     Box(
@@ -96,31 +86,86 @@ fun WeatherToday() {
                 tint = Color.White,
                 modifier = Modifier.size(25.dp)
             )
-            Text(
-                text = " Halifax",
-                color = Color.White,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold)
+            weather?.let {
+                Text(
+                    text = it.location.name,
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
 
         //          (Cloudy icon)
         //               7°C
 
+        // grab the 24 hourly forecast entries
+        val hourlyForecast = weather
+            ?.forecast
+            ?.forecastday
+            ?.firstOrNull()
+            ?.hour
+
+//        if (weather == null) {
+//
+//            Text(
+//                text = "Loading weather...",
+//                color = Color.White
+//            )
+//
+//        } else {
+//
+//            // weather UI
+//        }
         Column(
             modifier = Modifier.padding(horizontal = 30.dp, vertical = 100.dp),
             verticalArrangement = Arrangement.SpaceBetween,       // Centers items vertically (Main Axis)
             horizontalAlignment = Alignment.CenterHorizontally // Centers items horizontally (Cross Axis)
         ) {
+            // choosing icon based on weather condition
+            val icon = when {
+                weather?.current?.condition?.text?.contains("sun", true) == true ->
+                    Icons.Default.WbSunny
+
+                weather?.current?.condition?.text?.contains("rain", true) == true ->
+                    Icons.Default.Shower
+
+                weather?.current?.condition?.text?.contains("storm", true) == true ->
+                    Icons.Default.Thunderstorm
+
+                else ->
+                    Icons.Default.Cloud
+            }
+
+            // displaying the icon
             Icon(
-                imageVector = Icons.Default.Cloud,
-                contentDescription = "Cloudy icon",
+                imageVector = icon,
+                contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.size(80.dp))
-            Text(
-                text = "7°C",
-                color = Color.White,
-                style = MaterialTheme.typography.displayLarge,
-                fontWeight = FontWeight.SemiBold)
+
+            // Temperature
+            weather?.let {
+                Text(
+                    text = "${it.current.tempC}°C",
+                    color = Color.White,
+                    style = MaterialTheme.typography.displayLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+            // weather description
+            weather?.let {
+                Text(
+                    text = it.current.condition.text,
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+//            Text(
+//                text = "7°C",
+//                color = Color.White,
+//                style = MaterialTheme.typography.displayLarge,
+//                fontWeight = FontWeight.SemiBold)
 
             Spacer(modifier = Modifier.height(24.dp)) // Adds space
 
@@ -149,200 +194,51 @@ fun WeatherToday() {
                         color = MaterialTheme.colorScheme.outlineVariant
                     )
 
+
                     // -------------------- PLACEHOLDER DATA --------------------
+                    hourlyForecast?.take(12)?.forEach { hour ->
+                      // assigning icons to api results
+                        val icon = when {
+                            hour.condition.text.contains("sun", true) ->
+                                Icons.Default.WbSunny
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  8am")
-                        Icon(
-                            imageVector = Icons.Default.Cloud,
-                            contentDescription = "Cloudy icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "1°")
-                    }
+                            hour.condition.text.contains("rain", true) ->
+                                Icons.Default.Shower
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  9am")
-                        Icon(
-                            imageVector = Icons.Default.Cloud,
-                            contentDescription = "Cloudy icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "2°")
-                    }
+                            hour.condition.text.contains("storm", true) ->
+                                Icons.Default.Thunderstorm
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "10am")
-                        Icon(
-                            imageVector = Icons.Default.WbSunny,
-                            contentDescription = "Sunny icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "4°")
+                            else ->
+                                Icons.Default.Cloud
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+
+                            Text(
+                                text = hour.time.takeLast(5),
+                                color = Color.White
+                            )
+
+                            Icon(
+                                imageVector = icon,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+
+                            Text(
+                                text = hour.condition.text,
+                                color = Color.White
+                            )
+
+                            Text(
+                                text = "${hour.tempC}°",
+                                color = Color.White
+                            )
+                        }
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "11am")
-                        Icon(
-                            imageVector = Icons.Default.WbSunny,
-                            contentDescription = "Sunny icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "5°")
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "12pm")
-                        Icon(
-                            imageVector = Icons.Default.WbSunny,
-                            contentDescription = "Sunny icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "6°")
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  1pm")
-                        Icon(
-                            imageVector = Icons.Default.Cloud,
-                            contentDescription = "Sunny icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "7°")
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  2pm")
-                        Icon(
-                            imageVector = Icons.Default.Cloud,
-                            contentDescription = "Cloudy icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "5°")
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  3pm")
-                        Icon(
-                            imageVector = Icons.Default.Cloud,
-                            contentDescription = "Cloudy icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "4°")
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  4pm")
-                        Icon(
-                            imageVector = Icons.Default.Shower,
-                            contentDescription = "Rain icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "2°")
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  5pm")
-                        Icon(
-                            imageVector = Icons.Default.Shower,
-                            contentDescription = "Rain icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "2°")
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  6pm")
-                        Icon(
-                            imageVector = Icons.Default.Shower,
-                            contentDescription = "Rain icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "2°")
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  7pm")
-                        Icon(
-                            imageVector = Icons.Default.Thunderstorm,
-                            contentDescription = "Thunderstorm icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "1°")
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(text = "  8pm")
-                        Icon(
-                            imageVector = Icons.Default.Thunderstorm,
-                            contentDescription = "Thunderstorm icon",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = "1°")
-                    }
 
                     // ----------------- END OF PLACEHOLDER DATA -----------------
 
