@@ -43,6 +43,15 @@ dependencies {
     // Icons (for the nav menu buttons)
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.play.services.location)
+
+    // Location services
+    implementation(libs.play.services.location)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    // Retrofit GSON Converter
+    implementation(libs.converter.gson)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
